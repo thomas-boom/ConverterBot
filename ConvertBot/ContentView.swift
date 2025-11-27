@@ -63,7 +63,7 @@ struct ContentView: View {
     @State private var alertMessage: AlertMessage?
     @State private var showAbout = false
     @State private var compressMedia = false
-    @State private var selectedVideoPreset: String = AVAssetExportPresetPassthrough
+    @State private var selectedVideoPreset: String = AVAssetExportPresetHighestQuality
 
     init() {
         // Request notification permission on launch
@@ -120,12 +120,6 @@ struct ContentView: View {
                     .font(.system(size: 12, design: .monospaced))
 
                 Picker("Video Quality", selection: $selectedVideoPreset) {
-                    if selectedFile != nil {
-                        // Only show Passthrough if it's different from source file
-                        if selectedVideoPreset != AVAssetExportPresetPassthrough {
-                            Text("Passthrough (original)").tag(AVAssetExportPresetPassthrough)
-                        }
-                    }
                     Text("Highest Quality").tag(AVAssetExportPresetHighestQuality)
                     Text("Medium Quality").tag(AVAssetExportPresetMediumQuality)
                     Text("Low Quality").tag(AVAssetExportPresetLowQuality)
@@ -468,8 +462,18 @@ struct AboutWindow: View {
 
             Divider()
 
-            HStack {
+            HStack(spacing: 12) {
+                Button(action: {
+                    if let url = URL(string: "https://github.com/thomas-boom/ConvertBot") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }) {
+                    Label("View Repository", systemImage: "link")
+                }
+                .buttonStyle(.bordered)
+
                 Spacer()
+
                 Button("OK") {
                     // Dismiss sheet presentation
                     dismiss()
