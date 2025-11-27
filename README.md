@@ -4,7 +4,7 @@
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-**ConvertBot** is a macOS Sonoma+ utility for converting video and audio files with a modern, user-friendly SwiftUI interface. It leverages **AVFoundation** for native file conversion and optionally supports **FFmpeg** for AVI file processing.  
+**ConvertBot** is a macOS Sonoma+ utility for converting video and audio files with a modern, user-friendly SwiftUI interface. It leverages **AVFoundation** for native file conversion and optionally supports **FFmpeg** for (currently only) AVI file processing.  
 
 ---
 
@@ -37,11 +37,8 @@
 git clone https://github.com/thomas-boom/ConvertBot.git
 ```
 
-2.	Open ConvertBot.xcodeproj in Xcode.
+2.	Open SimpleMediaConverter.xcodeproj in Xcode (internal titles will be changed soon.)
 3.	Build and run the app on your Mac.
-
-
-> ⚠️ FFmpeg Support: To support AVI conversion via FFmpeg, include a static FFmpeg binary in the `Resources/ffmpeg` folder and make sure the binary is executable.
 
 ## Usage
 
@@ -55,8 +52,7 @@ git clone https://github.com/thomas-boom/ConvertBot.git
 ## FFmpeg Support
 
 - AVI files are converted using FFmpeg when available.
-- Place the FFmpeg binary at `Resources/ffmpeg/ffmpeg` (or `Resources/ffmpeg` depending on your bundle layout).
-- Ensure the binary is executable: `chmod +x Resources/ffmpeg/ffmpeg`.
+- `ffmpeg` is currently added to the `Resources` folder.
 - The app will detect and use FFmpeg automatically for AVI files.
 
 ---
