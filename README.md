@@ -34,7 +34,7 @@
 1. Clone this repository:  
 
 ```bash
-git clone https://github.com/yourusername/ConvertBot.git
+git clone https://github.com/thomas-boom/ConvertBot.git
 ```
 
 2.	Open ConvertBot.xcodeproj in Xcode.
