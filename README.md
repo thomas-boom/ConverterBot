@@ -40,38 +40,45 @@ git clone https://github.com/thomas-boom/ConvertBot.git
 2.	Open ConvertBot.xcodeproj in Xcode.
 3.	Build and run the app on your Mac.
 
-⚠️ FFmpeg Support: To support AVI conversion via FFmpeg, include a static FFmpeg binary in the Resources/FFmpeg folder. Make sure the binary is executable:
 
-Usage
-	1.	Click Choose Media… to select a video or audio file.
-	2.	For video, pick the desired export format (MOV, MP4, M4V).
-	3.	For audio, pick the desired export format (M4A, WAV, CAF, AAC, AIFF).
-	4.	Optional: Toggle Compress for smaller file size and select video quality.
-	5.	Conversion starts immediately; monitor progress with the animated progress bar.
-	6.	Once finished, the app notifies you and opens the converted file in Finder.
+> ⚠️ FFmpeg Support: To support AVI conversion via FFmpeg, include a static FFmpeg binary in the `Resources/ffmpeg` folder and make sure the binary is executable.
 
-FFmpeg Support
-	•	AVI files are converted using FFmpeg.
-	•	Place the binary in Resources/FFmpeg/ffmpeg.
-	•	The app automatically detects and uses FFmpeg for AVI files.
+## Usage
 
-⸻
+1. Click **Choose Media…** to select a video or audio file.
+2. For video, pick the desired export format: `MOV`, `MP4`, or `M4V`.
+3. For audio, pick the desired export format: `M4A`, `WAV`, `CAF`, `AAC`, or `AIFF`.
+4. (Optional) Toggle **Compress** for smaller file size and select video quality.
+5. Conversion starts immediately; monitor progress with the animated progress bar.
+6. When finished, the app will notify you and provide quick access to the converted file in Finder.
 
-Contributing
+## FFmpeg Support
 
-Contributions are welcome! Feel free to:
-	•	Submit pull requests
-	•	Report issues
-	•	Suggest features
+- AVI files are converted using FFmpeg when available.
+- Place the FFmpeg binary at `Resources/ffmpeg/ffmpeg` (or `Resources/ffmpeg` depending on your bundle layout).
+- Ensure the binary is executable: `chmod +x Resources/ffmpeg/ffmpeg`.
+- The app will detect and use FFmpeg automatically for AVI files.
 
-⸻
+---
 
-License
+## Contributing
 
-This project is licensed under the MIT License. See LICENSE￼ for details.
+Contributions are welcome! You can:
 
-⸻
+- Submit pull requests
+- Report issues
+- Suggest features
 
-About
+Please follow the repository's contribution guidelines when opening PRs.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
+
+---
+
+## About
 
 Created by Thomas Boom — 2025
