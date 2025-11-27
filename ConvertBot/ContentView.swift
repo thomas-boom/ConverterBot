@@ -135,38 +135,8 @@ struct ContentView: View {
                 .disabled(!compressMedia)
                 .opacity(compressMedia ? 1 : 0.5)
 
-                VStack(spacing: 6) {
-                    ZStack {
-                        // Background glass layer
-                        let barHeight: CGFloat = 16
-                        let cornerRadius: CGFloat = 14
-
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(.ultraThinMaterial)
-                            .frame(height: barHeight)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .stroke(.white.opacity(0.3), lineWidth: 2)
-                            )
-
-                        // Animated progress fill
-                        GeometryReader { geo in
-                            let width = geo.size.width * CGFloat(progress)
-                            let fillInset: CGFloat = 2
-                            RoundedRectangle(cornerRadius: cornerRadius - fillInset)
-                                .fill(Color.pink.opacity(0.7))
-                                .frame(width: max(width - fillInset * 2, 0), height: barHeight - fillInset * 2)
-                                .animation(.easeInOut(duration: 0.2), value: progress)
-                                .offset(x: fillInset, y: fillInset)
-                        }
-                        .frame(height: barHeight)
-                    }
-
-                    // Percentage label
-                    Text("\(Int(progress * 100))%")
-                        .font(.system(size: 14, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                }
+                // Progress display
+                progressBar
 
                 Spacer()
             }
@@ -396,5 +366,85 @@ struct ContentView: View {
         content.sound = UNNotificationSound.default
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
+    }
+
+    // MARK: - Helpers
+
+    private var isVideoSelection: Bool {
+        guard let t = selectedContentType else { return false }
+        return t.conforms(to: .movie) || t.conforms(to: .video)
+    }
+
+    private var isAudioSelection: Bool {
+        guard let t = selectedContentType else { return false }
+        return t.conforms(to: .audio)
+    }
+
+    private func uniqueURL(base: URL, ext: String) -> URL {
+        var dest = base.appendingPathExtension(ext)
+        var counter = 1
+        while FileManager.default.fileExists(atPath: dest.path) {
+            let name = "\(base.lastPathComponent)-\(counter)"
+            dest = base.deletingLastPathComponent().appendingPathComponent(name).appendingPathExtension(ext)
+            counter += 1
+        }
+        return dest
+    }
+
+    private var progressBar: some View {
+        let barHeight: CGFloat = 16
+        let cornerRadius: CGFloat = 14
+        let fillInset: CGFloat = 2
+
+        return VStack(spacing: 6) {
+            ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.ultraThinMaterial)
+                    .frame(height: barHeight)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(.white.opacity(0.3), lineWidth: 2)
+                    )
+
+                GeometryReader { geo in
+                    RoundedRectangle(cornerRadius: cornerRadius - fillInset)
+                        .fill(Color.pink.opacity(0.7))
+                        .frame(width: max(geo.size.width * CGFloat(progress) - fillInset * 2, 0), height: barHeight - fillInset * 2)
+                        .animation(.easeInOut(duration: 0.2), value: progress)
+                        .offset(x: fillInset, y: fillInset)
+                }
+                .frame(height: barHeight)
+            }
+
+            Text("\(Int(progress * 100))%")
+                .font(.system(size: 14, weight: .medium, design: .monospaced))
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+// Simple alert wrapper used by the view
+private struct AlertMessage: Identifiable {
+    let id = UUID()
+    let text: String
+}
+
+// Minimal About window shown by the sheet; keep lightweight for now
+struct AboutWindow: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("ConvertBot")
+                .font(.title2)
+            Text("A small helper to convert media files.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Divider()
+            Button("OK") {
+                NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSWindow.close), with: nil)
+            }
+            .keyboardShortcut(.defaultAction)
+        }
+        .padding(20)
+        .frame(minWidth: 300, minHeight: 140)
     }
 }
