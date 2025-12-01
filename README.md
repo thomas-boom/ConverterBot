@@ -4,7 +4,7 @@
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-**ConvertBot** is a macOS Sonoma+ utility for converting video and audio files with a modern, user-friendly SwiftUI interface. It leverages **AVFoundation** for native file conversion and optionally supports **FFmpeg** for (currently only) AVI file processing.  
+**ConvertBot** is a open-source macOS Sonoma+ utility for converting video and audio files with a modern, user-friendly SwiftUI interface. It leverages **AVFoundation** for native file conversion and optionally supports **FFmpeg** for (currently only) AVI file processing.  
 
 ---
 
@@ -16,7 +16,7 @@
 - ✅ Convert **video files** (`MOV`, `MP4`, `M4V`, `AVI`)  
 - ✅ Convert **audio files** (`M4A`, `WAV`, `MP3`, `AAC`, `AIFF`)  
 - ✅ Optional **compression** for smaller file sizes  
-- ✅ Select **video quality presets**: Passthrough, High, Medium, Low  
+- ✅ Select **video quality presets**: High, Medium, Low  
 - ✅ Native **progress bar** with percentage indicator  
 - ✅ Desktop **notifications** upon conversion completion  
 - ✅ Quick access to converted files in Finder  
@@ -26,7 +26,9 @@
 
 ## Requirements
 
-- macOS Sonoma or later  
+- macOS Sonoma or later
+
+  (optional)
 - Xcode 15+  
 - Swift 5.9+  
 
