@@ -1,0 +1,73 @@
+
+name: Update Changelog
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  update-changelog:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog entry
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          set -euo pipefail
+
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            RANGE="$AFTER"
+          else
+            RANGE="$BEFORE..$AFTER"
+          fi
+
+          echo "Using range: $RANGE"
+
+          COMMITS=$(git --no-pager log --pretty=format:"- %h %s (%an)" $RANGE || true)
+
+          if [ -z "$COMMITS" ]; then
+            echo "No commits found in range; nothing to add to changelog"
+            exit 0
+          fi
+
+          DATE=$(date -u +"%Y-%m-%d")
+          HEADER="## $DATE — ${AFTER}"
+
+          echo -e "$HEADER\n\n$COMMITS\n\n" > /tmp/entry.md
+
+      - name: Update `changelog` branch (no changes to `main`)
+        run: |
+          set -euo pipefail
+
+          # Create or switch to the changelog branch. This will not modify `main`.
+          if git show-ref --verify --quiet refs/heads/changelog; then
+            git switch changelog
+          else
+            git switch --create changelog
+          fi
+
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+          fi
+
+          cat /tmp/entry.md CHANGELOG.md > /tmp/NEW_CHANGELOG.md
+          mv /tmp/NEW_CHANGELOG.md CHANGELOG.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore(changelog): update changelog for ${AFTER} [skip ci]" || echo "No changes to commit"
+
+          # Push only to the `changelog` branch so `main` remains untouched.
+          git push origin changelog --force
